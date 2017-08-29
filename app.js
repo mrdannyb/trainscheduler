@@ -35,15 +35,16 @@ $(document).ready(function(){
 		var sv = snapshot.val();
 		var trainID = snapshot.key;
 
-		var nextTrain = 20;
-		
 		var start = moment(sv.first, "HHmm");
 		var minDiff = parseInt(start.diff(moment(), "minutes"));
 		var freq = parseInt(sv.frequency);
 		var minLeft = freq + (minDiff % freq);
+		
+		var m = moment().add(minLeft, "minutes");
+		var nextTrain = m.format("hh:mm");
 
 		var newRow = $("<tr>");
-		newRow.attr("id", trainID)
+		newRow.attr("id", trainID);
 
 		var nameData = $("<td>");
 		nameData.html(sv.name);
