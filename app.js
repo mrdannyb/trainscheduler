@@ -25,16 +25,22 @@ $(document).ready(function(){
 			frequency : frequency,
 			first : first
 		});
-		console.log(first);
+		$("#name").val("");
+		$("#destination").val();
+		$("#frequency").val();
+		$("#first-train").val();
 	});
 
 	database.ref().on("child_added", function(snapshot){
 		var sv = snapshot.val();
-		console.log(sv);
-
 		var trainID = snapshot.key;
+
 		var nextTrain = 20;
-		var minLeft = 10;
+		
+		var start = moment(sv.first, "HHmm");
+		var minDiff = parseInt(start.diff(moment(), "minutes"));
+		var freq = parseInt(sv.frequency);
+		var minLeft = freq + (minDiff % freq);
 
 		var newRow = $("<tr>");
 		newRow.attr("id", trainID)
@@ -46,7 +52,7 @@ $(document).ready(function(){
 		destData.html(sv.destination);
 		newRow.append(destData);
 		var freqData = $("<td>");
-		freqData.html(sv.destination);
+		freqData.html(sv.frequency);
 		newRow.append(freqData);
 		var nextData = $("<td>");
 		nextData.html(nextTrain);
@@ -57,9 +63,16 @@ $(document).ready(function(){
 
 		var deleteButton = $("<button>");
 		deleteButton.attr("value", trainID);
+		deleteButton.attr("class", "delbutt")
 		deleteButton.html("X");
 		newRow.append(deleteButton);
 
 		$("#table-body").append(newRow);
+	})
+
+	$(document).on("click", ".delbutt", function(){
+		var delID = $(this).attr("value");
+		database.ref().child(delID).remove();
+		$("#" + delID).remove();
 	})
 })
