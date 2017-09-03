@@ -26,9 +26,9 @@ $(document).ready(function(){
 			first : first
 		});
 		$("#name").val("");
-		$("#destination").val();
-		$("#frequency").val();
-		$("#first-train").val();
+		$("#destination").val("");
+		$("#frequency").val("");
+		$("#first-train").val("");
 	});
 
 	database.ref().on("child_added", function(snapshot){
